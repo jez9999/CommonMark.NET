@@ -1,6 +1,8 @@
-[![Build status](https://ci.appveyor.com/api/projects/status/9jo20450utqy1p0o/branch/master?svg=true)](https://ci.appveyor.com/project/Knagis/commonmark-net/branch/master)
-
 # CommonMark.NET
+
+NOTE: This is a fork of CommonMark.NET by Jeremy Morton that adds the option of GitHub-style header ID generation for output.
+
+---
 
 Implementation of [CommonMark] [1] specification (passes tests from version 0.23) in C# for converting Markdown documents to HTML.
 
