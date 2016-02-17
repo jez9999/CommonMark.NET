@@ -212,7 +212,7 @@ namespace CommonMark
                 switch (settings.OutputFormat)
                 {
                     case OutputFormat.Html:
-                        HtmlFormatterSlim.BlocksToHtml(target, document, settings);
+                        new HtmlFormatterSlim().BlocksToHtml(target, document, settings);
                         break;
                     case OutputFormat.SyntaxTree:
                         Printer.PrintBlocks(target, document, settings);

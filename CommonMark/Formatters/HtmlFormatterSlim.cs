@@ -7,7 +7,7 @@ using CommonMark.Syntax;
 
 namespace CommonMark.Formatters
 {
-    internal static class HtmlFormatterSlim
+    internal class HtmlFormatterSlim
     {
         private static readonly char[] EscapeHtmlCharacters = { '&', '<', '>', '"' };
         private const string HexCharacters = "0123456789ABCDEF";
@@ -31,7 +31,7 @@ namespace CommonMark.Formatters
             true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  true,  false, false, false, false, false
         };
 
-        private static readonly Dictionary<string, uint> GitHubHeaderIdCounts = new Dictionary<string, uint>();
+        private Dictionary<string, uint> GitHubHeaderIdCounts;
 
         /// <summary>
         /// Escapes special URL characters.
@@ -191,7 +191,7 @@ namespace CommonMark.Formatters
             }
         }
         
-        public static void BlocksToHtml(TextWriter writer, Block block, CommonMarkSettings settings)
+        public void BlocksToHtml(TextWriter writer, Block block, CommonMarkSettings settings)
         {
             var wrapper = new HtmlTextWriter(writer);
             BlocksToHtmlInner(wrapper, block, settings);
@@ -215,7 +215,7 @@ namespace CommonMark.Formatters
             writer.WriteConstant("\"");
         }
 
-        private static void BlocksToHtmlInner(HtmlTextWriter writer, Block block, CommonMarkSettings settings)
+        private void BlocksToHtmlInner(HtmlTextWriter writer, Block block, CommonMarkSettings settings)
         {
             var stack = new Stack<BlockStackEntry>();
             var inlineStack = new Stack<InlineStackEntry>();
@@ -226,6 +226,9 @@ namespace CommonMark.Formatters
             bool doGitHubHeadings = (settings.AdditionalFeatures & CommonMarkAdditionalFeatures.GitHubStyleHeadingIds) > 0;
             bool trackPositions = settings.TrackSourcePosition;
             int x;
+
+            if (doGitHubHeadings)
+                GitHubHeaderIdCounts = new Dictionary<string, uint>();
 
             while (block != null)
             {
@@ -659,7 +662,7 @@ namespace CommonMark.Formatters
             }
         }
 
-        private static void WriteGitHubHeadingIds(HtmlTextWriter writer, Inline inline, CommonMarkSettings settings, Stack<InlineStackEntry> stack) {
+        private void WriteGitHubHeadingIds(HtmlTextWriter writer, Inline inline, CommonMarkSettings settings, Stack<InlineStackEntry> stack) {
             using (var tempWriter = new System.IO.StringWriter()) {
                 var tempWrapper = new HtmlTextWriter(tempWriter);
                 var tempStringBuilder = new StringBuilder();
